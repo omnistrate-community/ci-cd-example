@@ -16,7 +16,7 @@ Before running the workflow, ensure you have set up the following GitHub reposit
        - `write:packages`
        - `delete:packages`
   3. Click `Generate token` and copy the token to your clipboard.
-- `OMNISTRATE_USERNAME`: Your Omnistrate username.
+- `OMNISTRATE_USERNAME`: Your Omnistrate username (email).
 - `OMNISTRATE_PASSWORD`: Your Omnistrate password.
 
 ## Workflow Triggers
