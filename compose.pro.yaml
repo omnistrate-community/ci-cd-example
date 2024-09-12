@@ -1,6 +1,6 @@
 services:
   hello-world:
-    image: ghcr.io/ghcr.io/g-despacito/hello-world:latest
+    image: ghcr.io/omnistrate/ci-cd-example:latest
     privileged: true
 x-omnistrate-image-registry-attributes:
   ghcr.io:
