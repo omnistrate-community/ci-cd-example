@@ -1,0 +1,15 @@
+services:
+  hello-world:
+    image: ghcr.io/ghcr.io/g-despacito/hello-world:latest
+    privileged: true
+x-omnistrate-image-registry-attributes:
+  ghcr.io:
+    auth:
+      password: $IMAGE_REGISTRY_PASSWORD
+      username: $IMAGE_REGISTRY_USERNAME
+x-omnistrate-integration:
+- omnistrateLogging
+- omnistrateMetrics
+x-omnistrate-service-plan:
+  name: hello-world-pro
+  tenancyType: OMNISTRATE_DEDICATED_TENANCY

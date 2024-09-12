@@ -1,0 +1,42 @@
+name: Upgrade instances
+
+on:
+  workflow_dispatch:
+    inputs:
+      instance_ids:
+        description: 'Space-separated list of instance IDs to upgrade'
+        required: true
+        type: string
+      target_version:
+        description: 'Target version for the upgrade. e.g. 1.0 | latest | preferred'
+        required: true
+        type: string
+
+# TODO: Change the env variables to match your service
+env:
+  # omnistrate credentials, service name, dev and prod environment names
+  OMNISTRATE_USERNAME: ${{ secrets.OMNISTRATE_USERNAME }}
+  OMNISTRATE_PASSWORD: ${{ secrets.OMNISTRATE_PASSWORD }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  upgrade-instances:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upgrade instances
+        uses: ./.github/actions/upgrade-instances
+        with:
+          username: ${{ env.OMNISTRATE_USERNAME }}
+          password: ${{ env.OMNISTRATE_PASSWORD }}
+          instances: ${{ github.event.inputs.instance_ids }}  # Space-separated list of instance IDs
+          target-version: ${{ github.event.inputs.target_version }}  # User-provided target version
