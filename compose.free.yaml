@@ -9,7 +9,7 @@ x-omnistrate-image-registry-attributes:
     auth:
       password: $IMAGE_REGISTRY_PASSWORD
       username: $IMAGE_REGISTRY_USERNAME
-x-omnistrate-integration:
+x-omnistrate-integrations:
 - omnistrateLogging
 - omnistrateMetrics
 x-omnistrate-service-plan:
