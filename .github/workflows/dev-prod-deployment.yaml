@@ -9,8 +9,8 @@ on:
 env:
   # The registry to push the image to.
   REGISTRY: ghcr.io
-  REGISTRY_USERNAME: ${{ github.actor }}
-  REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }} # TODO: Setup your github username as a secret before running the workflow
+  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }} # TODO: Setup your github Personal Access Token as a secret before running the workflow
   # platforms to build the image for
   PLATFORMS: linux/arm64,linux/amd64
   # omnistrate credentials, service name, dev and prod environment names
@@ -117,12 +117,6 @@ jobs:
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
 
-      - name: Upload yaml to artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.plans.file }}
-          path: ${{ matrix.plans.file }}
-
       - name: Update Omnistrate plan in dev environment
         uses: ./.github/actions/update-omnistrate-plan
         with:
@@ -148,6 +142,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Replace Variables
+        run: |
+          sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
+          sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
 
       - name: Update Omnistrate plan in prod environment
         uses: ./.github/actions/update-omnistrate-plan

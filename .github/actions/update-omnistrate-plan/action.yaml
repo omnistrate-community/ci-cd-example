@@ -39,5 +39,8 @@ runs:
         echo "Omnistrate CTL version:"
         omctl --version
         
+        echo "Checking the file content:"
+        cat "${{ github.workspace }}/${{ inputs.file }}"
+        
         echo "Updating plan with file: ${{ inputs.file }}"
         omctl build -f "${{ github.workspace }}/${{ inputs.file }}" -n "${{ inputs.service-name }}" --environment "${{ inputs.environment }}" --environment-type "${{ inputs.environment-type }}" --release-as-preferred
