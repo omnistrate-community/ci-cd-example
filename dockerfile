@@ -10,4 +10,4 @@ RUN chmod +x entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 EXPOSE 8080
-LABEL org.opencontainers.image.source=https://github.com/G-Despacito/hello-world
+LABEL org.opencontainers.image.source=https://github.com/omnistrate/ci-cd-example
