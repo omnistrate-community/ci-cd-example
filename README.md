@@ -1,30 +1,56 @@
-# ci-cd-example
+# CI/CD Example
 
-This is a simple example of a CI/CD pipeline using GitHub Actions.
+This repository demonstrates a CI/CD pipeline using GitHub Actions. It includes workflows for deploying to development and production environments and other common CI/CD tasks.
 
 ## Prerequisites
 
-Before running the workflow, ensure you have set up the following GitHub repository secrets:
+Before running the workflows, ensure you have set up the following GitHub repository secrets:
 
-- `REGISTRY_USERNAME`: Your GitHub username. Set it exactly as your GitHub username.
-- `REGISTRY_PASSWORD`: Your GitHub Personal Access Token with the required scope and expiration. Generate a new token [here](https://github.com/settings/tokens) following below steps:
-  1. Click on the `Generate new token` button. Choose `Generate new token (classic)`. Authenticate with your GitHub account.
-  2. Enter / Select the following details:
-     - Enter Note:  omnistrate-ci-cd` or any other note you prefer
-     - Select Expiration: `No expiration`
-     - Select the following scopes:
-       - `write:packages`
-       - `delete:packages`
-  3. Click `Generate token` and copy the token to your clipboard.
-- `OMNISTRATE_USERNAME`: Your Omnistrate username (email).
-- `OMNISTRATE_PASSWORD`: Your Omnistrate password.
+- **`REGISTRY_USERNAME`**: Your GitHub username.
+- **`REGISTRY_PASSWORD`**: Your GitHub Personal Access Token with the required scopes and expiration. Generate a new token [here](https://github.com/settings/tokens) by following these steps:
+    1. Click on the `Generate new token` button. Choose `Generate new token (classic)`. Authenticate with your GitHub account.
+    2. Enter/select the following details:
+        - **Note**: `omnistrate-ci-cd` or any note you prefer.
+        - **Expiration**: `No expiration`.
+        - **Scopes**:
+            - `write:packages`
+            - `delete:packages`
+    3. Click `Generate token` and copy the token to your clipboard.
+- **`OMNISTRATE_USERNAME`**: Your Omnistrate username (email).
+- **`OMNISTRATE_PASSWORD`**: Your Omnistrate password.
 
-## Workflow Triggers
+## Workflow Overview
 
-- **Release Published**: The Dev Prod Deployment workflow is triggered when a new release is published.
-- **Manual Trigger**: You can also manually trigger the workflow using in the Actions tab.
+### Dev Prod Deployment
 
-## Customizing the Workflow
+This workflow handles building and deploying Docker images to different environments. It has three main jobs:
 
+1. **Build and Push**: Builds the Docker image and pushes it to the GitHub Container Registry. It uses Docker Buildx to support multi-architecture builds and caches to speed up the build process.
+2. **Deploy to Dev**: Updates the development environment with the new Docker image.
+3. **Deploy to Prod**: Updates the production environment with the new Docker image, creating the production environment if it does not exist.
 
-Find the workflow files in `.github/workflows`. You can customize the workflow by changing the values suggested by the comments.
+**Triggers:**
+- **Release Published**: Automatically triggered when a new release is published.
+- **Manual Trigger**: Can be manually triggered from the Actions tab.
+
+### Upgrade Instances
+
+This workflow upgrades instances to a specified target version.
+
+**Triggers:**
+- **Manual Trigger**: Can be manually triggered from the Actions tab, requiring user input for instance IDs and the target version.
+
+## Customizing the Workflows
+
+### Dev Prod Deployment Workflow
+
+- **Dockerfile Path**: Change the path to the Dockerfile if it's different from `./Dockerfile`.
+- **Service Plans**: Update the paths to your Docker Compose files or other configuration files.
+- **Omnistrate Credentials**: Ensure your Omnistrate credentials and environment names match your setup.
+
+### Upgrade Instances Workflow
+
+- **Instance IDs**: Provide a space-separated list of instance IDs to upgrade.
+- **Target Version**: Specify the target version for the upgrade (e.g., `1.0`, `latest`, `preferred`).
+
+Find the workflow files in `.github/workflows`. You can customize these workflows by modifying the values and paths according to your needs.
