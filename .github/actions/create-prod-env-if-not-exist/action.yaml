@@ -1,0 +1,44 @@
+name: Create Production Environment if not exist
+description: "Create a production environment if it does not exist"
+
+inputs:
+  username:
+    description: "The username to use for authentication"
+    required: true
+  password:
+    description: "The password to use for authentication"
+    required: true
+  service-name:
+    description: "The name of the service to update"
+    required: true
+  dev-environment-name:
+    description: "The name of the development environment"
+    required: true
+  prod-environment-name:
+    description: "The name of the production environment"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Omnistrate CTL
+      uses: omnistrate/setup-omnistrate-ctl@v1
+      with:
+        email: ${{ inputs.username }}
+        password: ${{ inputs.password }}
+        version: latest
+
+    - name: Create production environment if not exist
+      shell: bash
+      run: |
+        echo "Omnistrate CTL version:"
+        omctl --version
+        
+        echo "Describe environment: service-name=${{ inputs.service-name }} environment=${{ inputs.prod-environment-name }}"
+        omctl environment describe "${{ inputs.service-name }}" "${{ inputs.prod-environment-name }}"
+        
+        # If the environment does not exist, create it
+        if [ $? -ne 0 ]; then
+          echo "Creating environment: service-name=${{ inputs.service-name }} environment=${{ inputs.prod-environment-name }}"
+          omctl environment create "${{ inputs.service-name }}" "${{ inputs.prod-environment-name }}" --source "${{ inputs.dev-environment-name }}" --type prod
+        fi
