@@ -4,20 +4,38 @@ This repository demonstrates a CI/CD pipeline using GitHub Actions. It includes 
 
 ## Prerequisites
 
-Before running the workflows, ensure you have set up the following GitHub repository secrets:
+Before running the workflows, ensure you have the following:
 
-- **`REGISTRY_USERNAME`**: Your GitHub username.
-- **`REGISTRY_PASSWORD`**: Your GitHub Personal Access Token with the required scopes and expiration. Generate a new token [here](https://github.com/settings/tokens) by following these steps:
-    1. Click on the `Generate new token` button. Choose `Generate new token (classic)`. Authenticate with your GitHub account.
-    2. Enter/select the following details:
-        - **Note**: `omnistrate-ci-cd` or any note you prefer.
-        - **Expiration**: `No expiration`.
-        - **Scopes**:
-            - `write:packages`
-            - `delete:packages`
-    3. Click `Generate token` and copy the token to your clipboard.
-- **`OMNISTRATE_USERNAME`**: Your Omnistrate username (email).
-- **`OMNISTRATE_PASSWORD`**: Your Omnistrate password.
+- Set up the following secrets in your GitHub repository:
+  - **`REGISTRY_USERNAME`**: Your Docker Hub username if you are using Docker Hub. If you are using the GitHub Container Registry, set this to your GitHub username.
+  - **`REGISTRY_PASSWORD`**: Your Docker Hub password if you are using Docker Hub. If you are using the GitHub Container Registry, set this to your GitHub Personal Access Token with the required scopes and expiration. Generate a new token [here](https://github.com/settings/tokens) by following these steps:
+      1. Click on the `Generate new token` button. Choose `Generate new token (classic)`. Authenticate with your GitHub account.
+      2. Enter/select the following details:
+          - **Note**: `omnistrate-ci-cd` or any note you prefer.
+          - **Expiration**: `No expiration`.
+          - **Scopes**:
+              - `write:packages`
+              - `delete:packages`
+      3. Click `Generate token` and copy the token to your clipboard.
+  - **`OMNISTRATE_USERNAME`**: Your Omnistrate username (email).
+  - **`OMNISTRATE_PASSWORD`**: Your Omnistrate password.
+
+
+- Ensure that your Compose Spec file includes the `x-omnistrate-image-registry-attributes` section with the placeholder values for the `auth` section.
+  ```yaml
+  x-omnistrate-image-registry-attributes:
+    ghcr.io: # Change to docker.io if you want to publish your image on docker.io
+      auth:
+        password: $IMAGE_REGISTRY_PASSWORD # DO NOT CHANGE. Put this placeholder exactly as it is. The workflow will replace it with the real value before building it into service.
+        username: $IMAGE_REGISTRY_USERNAME # Same as above
+  ```
+- Ensure that your Compose Spec file includes the `x-omnistrate-service-plan` section with service plan details.
+  ```yaml
+  x-omnistrate-service-plan:
+    name: [Put your service plan name here]
+    tenancyType: [Put OMNISTRATE_MULTI_TENANCY or OMNISTRATE_DEDICATED_TENANCY]
+  ```
+- Review the TODOs in `.github/workflows/dev-prod-deployment.yaml` and ensure that the values are correctly set for your case.
 
 ## Workflow Overview
 
