@@ -49,5 +49,5 @@ runs:
         # If the environment does not exist, create it
         if [ $exit_code -ne 0 ]; then
           echo "Creating environment: service-name=${{ inputs.service-name }} environment=${{ inputs.prod-environment-name }}"
-          omctl environment create "${{ inputs.service-name }}" "${{ inputs.prod-environment-name }}" --source "${{ inputs.dev-environment-name }}" --type prod
+          omctl environment create "${{ inputs.service-name }}" "${{ inputs.prod-environment-name }}" --source "${{ inputs.dev-environment-name }}" --type PROD
         fi
