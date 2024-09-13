@@ -1,17 +1,28 @@
+x-omnistrate-service-plan:
+  name: hello-world-free
+  tenancyType: OMNISTRATE_MULTI_TENANCY
+
+x-omnistrate-integrations:
+  - omnistrateLogging
+  - omnistrateMetrics
+
+x-omnistrate-image-registry-attributes:
+  ghcr.io:
+    auth:
+      password: $IMAGE_REGISTRY_PASSWORD
+      username: $IMAGE_REGISTRY_USERNAME
+
 services:
   hello-world:
     image: ghcr.io/omnistrate/ci-cd-example:latest
     ports:
       - target: 3000
     privileged: true
-x-omnistrate-image-registry-attributes:
-  ghcr.io:
-    auth:
-      password: $IMAGE_REGISTRY_PASSWORD
-      username: $IMAGE_REGISTRY_USERNAME
-x-omnistrate-integrations:
-- omnistrateLogging
-- omnistrateMetrics
-x-omnistrate-service-plan:
-  name: hello-world-free
-  tenancyType: OMNISTRATE_DEDICATED_TENANCY
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
