@@ -21,7 +21,7 @@ Before running the workflows, ensure you have the following:
   - **`OMNISTRATE_PASSWORD`**: Your Omnistrate password.
 
 
-- Ensure that your Compose Spec file includes the `x-omnistrate-image-registry-attributes` section with the placeholder values for the `auth` section.
+- Ensure that your Compose Spec file includes the `x-omnistrate-image-registry-attributes` section as shown below, as well as the `x-omnistrate-service-plan` section. Refer to the [x-omnistrate-service-plan](https://docs.omnistrate.com/getting-started/compose-spec/#x-omnistrate-service-plan) for more information.
   ```yaml
   x-omnistrate-image-registry-attributes:
     ghcr.io: # Change to docker.io if you want to publish your image on docker.io
@@ -29,12 +29,7 @@ Before running the workflows, ensure you have the following:
         password: $IMAGE_REGISTRY_PASSWORD # DO NOT CHANGE. Put this placeholder exactly as it is. The workflow will replace it with the real value before building it into service.
         username: $IMAGE_REGISTRY_USERNAME # Same as above
   ```
-- Ensure that your Compose Spec file includes the `x-omnistrate-service-plan` section with service plan details.
-  ```yaml
-  x-omnistrate-service-plan:
-    name: [Put your service plan name here]
-    tenancyType: [Put OMNISTRATE_MULTI_TENANCY or OMNISTRATE_DEDICATED_TENANCY]
-  ```
+  
 - Review the TODOs in `.github/workflows/dev-prod-deployment.yaml` and ensure that the values are correctly set for your case.
 
 ## Workflow Overview
