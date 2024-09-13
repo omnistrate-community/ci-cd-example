@@ -34,11 +34,20 @@ runs:
         echo "Omnistrate CTL version:"
         omctl --version
         
+        # Disable exit on error
+        set +e
+        
         echo "Describe environment: service-name=${{ inputs.service-name }} environment=${{ inputs.prod-environment-name }}"
         omctl environment describe "${{ inputs.service-name }}" "${{ inputs.prod-environment-name }}"
         
+        # Capture the exit code
+        exit_code=$?
+        
+        # Re-enable exit on error
+        set -e
+        
         # If the environment does not exist, create it
-        if [ $? -ne 0 ]; then
+        if [ $exit_code -ne 0 ]; then
           echo "Creating environment: service-name=${{ inputs.service-name }} environment=${{ inputs.prod-environment-name }}"
           omctl environment create "${{ inputs.service-name }}" "${{ inputs.prod-environment-name }}" --source "${{ inputs.dev-environment-name }}" --type prod
         fi
