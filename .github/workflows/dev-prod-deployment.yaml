@@ -143,6 +143,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Create Production Environment if not exist
+        uses: ./.github/actions/create-prod-env-if-not-exist
+        with:
+          username: ${{ env.OMNISTRATE_USERNAME }}
+          password: ${{ env.OMNISTRATE_PASSWORD }}
+          service-name: ${{ env.OMNISTRATE_SERVICE_NAME }}
+          dev-environment-name: ${{ env.OMNISTRATE_DEV_ENVIRONMENT_NAME }}
+          prod-environment-name: ${{ env.OMNISTRATE_PROD_ENVIRONMENT_NAME }}
+
       - name: Replace Variables
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
