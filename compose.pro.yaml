@@ -2,7 +2,7 @@ services:
   hello-world:
     image: ghcr.io/omnistrate/ci-cd-example:latest
     ports:
-      - target: 8080
+      - target: 3000
     privileged: true
 x-omnistrate-image-registry-attributes:
   ghcr.io:
