@@ -74,6 +74,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha,format=long
+            latest # you can just add latest here
 
       - name: Convert image name to lowercase # why do we need this?
         id: convert-name
