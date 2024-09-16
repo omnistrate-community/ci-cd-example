@@ -31,9 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
-      matrix:
+      matrix: # do we need to define a matrix here, normally you will have a single docker file
         include:
-          - dockerfile: ./Dockerfile # TODO: Change this to your Dockerfile path
+          - dockerfile: ./dockerfile # TODO: Change this to your Dockerfile path
             image-name: ${{ github.repository }}
 
     permissions:
@@ -75,7 +75,7 @@ jobs:
             type=semver,pattern={{major}}
             type=sha,format=long
 
-      - name: Convert image name to lowercase
+      - name: Convert image name to lowercase # why do we need this?
         id: convert-name
         run: echo "IMAGE_NAME=$(echo ${{ matrix.image-name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
@@ -112,7 +112,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Replace Variables
+      - name: Replace Variables # why do we need this?
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
@@ -151,7 +151,7 @@ jobs:
           dev-environment-name: ${{ env.OMNISTRATE_DEV_ENVIRONMENT_NAME }}
           prod-environment-name: ${{ env.OMNISTRATE_PROD_ENVIRONMENT_NAME }}
 
-      - name: Replace Variables
+      - name: Replace Variables # why do we need this?
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
