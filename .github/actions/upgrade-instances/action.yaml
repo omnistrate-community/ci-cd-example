@@ -26,12 +26,9 @@ runs:
         version: latest
 
     - name: Upgrade instances
-      shell: bash
+      shell: bash # do we need this?
       run: |
-        set -e
-        
-        echo "Omnistrate CTL version:"
-        omctl --version
+        set -e # do we need this?
         
         echo "Upgrading instances: ${{ inputs.instances }}"
         omctl upgrade ${{ inputs.instances }} --version ${{ inputs.target-version }}

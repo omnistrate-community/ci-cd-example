@@ -27,13 +27,10 @@ runs:
         email: ${{ inputs.username }}
         password: ${{ inputs.password }}
         version: latest
-
+      
     - name: Create production environment if not exist
-      shell: bash
+      shell: bash # do we need this?
       run: |
-        echo "Omnistrate CTL version:"
-        omctl --version
-        
         # Disable exit on error
         set +e
         
