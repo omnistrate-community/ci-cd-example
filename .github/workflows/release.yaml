@@ -1,4 +1,4 @@
-name: Release new version
+name: Release new version # we should trigger a different workflow instance per plan, can we make the plan a parameter of the environment?
 
 on:
   release:
