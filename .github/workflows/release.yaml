@@ -42,7 +42,7 @@ jobs:
       matrix:
         include:
           - dockerfile: ./dockerfile # TODO: Change this to your Dockerfile path
-            image-name: env.IMAGE_NAME
+            image-name: ${{ env.IMAGE_NAME }}
 
     permissions:
       contents: read
