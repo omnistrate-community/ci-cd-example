@@ -11,9 +11,6 @@ on:
         type: string
 
 env:
-  # Image name
-  IMAGE_NAME: ${{ github.repository }}
-
   # The registry to push the image to.
   REGISTRY: ghcr.io # TODO: Change this to docker.io if you are using Docker Hub
   REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
@@ -42,7 +39,7 @@ jobs:
       matrix:
         include:
           - dockerfile: ./dockerfile # TODO: Change this to your Dockerfile path
-            image-name: ${{ env.IMAGE_NAME }}
+            image-name: ${{ github.repository }}
 
     permissions:
       contents: read
