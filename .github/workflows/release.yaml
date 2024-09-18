@@ -84,8 +84,8 @@ jobs:
       - name: Get image URI with SHA tag
         id: get-image-uri
         run: |
-          sha_tag=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | grep 'sha')
-          echo "IMAGE_URI=$sha_tag" >> $GITHUB_ENV
+          IMAGE_URI=$(echo "${{ steps.meta.outputs.tags }}" | grep 'sha')
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
       - name: Build and push multi-arch
         timeout-minutes: 20
