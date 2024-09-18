@@ -11,6 +11,12 @@ on:
         type: string
 
 env:
+  # Image name
+  IMAGE_NAME: ${{ github.repository }}
+
+  # Dockerfile path
+  DOCKERFILE: ./dockerfile # TODO: Change this to your Dockerfile path
+
   # The registry to push the image to.
   REGISTRY: ghcr.io # TODO: Change this to docker.io if you are using Docker Hub
   REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
@@ -26,6 +32,8 @@ env:
   OMNISTRATE_DEV_ENVIRONMENT_NAME: Dev # TODO: Change this to your dev environment name
   OMNISTRATE_PROD_ENVIRONMENT_NAME: Production # TODO: Change this to your prod environment name
 
+  IMAGE_URI: PLACEHOLDER # This will be set in the workflow
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -34,12 +42,6 @@ jobs:
 
   build-and-push:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        include:
-          - dockerfile: ./dockerfile # TODO: Change this to your Dockerfile path
-            image-name: ${{ github.repository }}
 
     permissions:
       contents: read
@@ -49,6 +51,9 @@ jobs:
     concurrency:
       group: package-${{ github.workflow }}-${{ github.head_ref }}
       cancel-in-progress: true
+
+    outputs:
+      image_uri: ${{ steps.get-image-uri.outputs.image_uri }}
 
     steps:
       - name: Checkout repository
@@ -73,7 +78,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ matrix.image-name }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -85,8 +90,7 @@ jobs:
         id: get-image-uri
         run: |
           IMAGE_URI=$(echo "${{ steps.meta.outputs.tags }}" | grep 'sha')
-          echo "IMAGE_URI=$IMAGE_URI"
-          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
+          echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
       - name: Build and push multi-arch
         timeout-minutes: 20
@@ -94,7 +98,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ${{ matrix.dockerfile }}
+          file: ${{ env.DOCKERFILE }}
           platforms: ${{ env.PLATFORMS }}
           build-args: |
             # TODO: Add build arguments here if needed
@@ -127,7 +131,7 @@ jobs:
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
-          sed -i 's/$IMAGE_URI/${{ env.IMAGE_URI }}/g' ${{ matrix.plans.file }}
+          sed -i 's/$IMAGE_URI/${{ needs.build-and-push.outputs.image_uri }}/g' ${{ matrix.plans.file }}
 
       - name: Update Omnistrate plan in dev environment
         if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
