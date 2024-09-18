@@ -85,6 +85,7 @@ jobs:
         id: get-image-uri
         run: |
           IMAGE_URI=$(echo "${{ steps.meta.outputs.tags }}" | grep 'sha')
+          echo "IMAGE_URI=$IMAGE_URI"
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
       - name: Build and push multi-arch
