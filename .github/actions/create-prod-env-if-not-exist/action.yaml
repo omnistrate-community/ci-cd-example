@@ -29,7 +29,6 @@ runs:
         version: latest
       
     - name: Create production environment if not exist
-      shell: bash # do we need this?
       run: |
         # Disable exit on error
         set +e

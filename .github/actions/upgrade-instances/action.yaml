@@ -26,9 +26,6 @@ runs:
         version: latest
 
     - name: Upgrade instances
-      shell: bash # do we need this?
       run: |
-        set -e # do we need this?
-        
         echo "Upgrading instances: ${{ inputs.instances }}"
         omctl upgrade ${{ inputs.instances }} --version ${{ inputs.target-version }}
