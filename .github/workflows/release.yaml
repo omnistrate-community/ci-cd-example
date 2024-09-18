@@ -1,9 +1,14 @@
-name: Release new version # we should trigger a different workflow instance per plan, can we make the plan a parameter of the environment?
+name: Release new version
 
 on:
   release:
     types: [ "published" ]
   workflow_dispatch:
+    inputs:
+      plan:
+        description: 'Choose a specific plan to release, e.g. free | pro. If not provided, both plans will be released.'
+        required: false
+        type: string
 
 env:
   # Image name
@@ -110,19 +115,24 @@ jobs:
       matrix:
         plans: # TODO: Change this to your list of plans. Set the file attribute to the path of the spec file.
           - file: compose.free.yaml
+            key: free
           - file: compose.pro.yaml
+            key: pro
     environment: Dev
     steps:
       - name: Checkout
+        if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
         uses: actions/checkout@v4
 
       - name: Replace Variables
+        if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_URI/${{ env.IMAGE_URI }}/g' ${{ matrix.plans.file }}
 
       - name: Update Omnistrate plan in dev environment
+        if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
         uses: ./.github/actions/update-omnistrate-plan
         with:
           username: ${{ env.OMNISTRATE_USERNAME }}
@@ -141,13 +151,17 @@ jobs:
       matrix:
         plans: # TODO: Change this to your list of plans. Set the file attribute to the path of the spec file.
           - file: compose.free.yaml
+            key: free
           - file: compose.pro.yaml
+            key: pro
     environment: Production
     steps:
       - name: Checkout
+        if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
         uses: actions/checkout@v4
 
       - name: Create Production Environment if not exist
+        if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
         uses: ./.github/actions/create-prod-env-if-not-exist
         with:
           username: ${{ env.OMNISTRATE_USERNAME }}
@@ -157,11 +171,14 @@ jobs:
           prod-environment-name: ${{ env.OMNISTRATE_PROD_ENVIRONMENT_NAME }}
 
       - name: Replace Variables
+        if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
+          sed -i 's/$IMAGE_URI/${{ env.IMAGE_URI }}/g' ${{ matrix.plans.file }}
 
       - name: Update Omnistrate plan in prod environment
+        if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
         uses: ./.github/actions/update-omnistrate-plan
         with:
           username: ${{ env.OMNISTRATE_USERNAME }}
