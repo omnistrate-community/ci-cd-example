@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 
 env:
+  # Image name
+  IMAGE_NAME: ${{ github.repository }}
+
   # The registry to push the image to.
   REGISTRY: ghcr.io # TODO: Change this to docker.io if you are using Docker Hub
   REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
@@ -31,10 +34,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
-      matrix: # do we need to define a matrix here, normally you will have a single docker file
+      matrix:
         include:
           - dockerfile: ./dockerfile # TODO: Change this to your Dockerfile path
-            image-name: ${{ github.repository }}
+            image-name: env.IMAGE_NAME
 
     permissions:
       contents: read
@@ -74,11 +77,13 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha,format=long
-            latest # you can just add latest here
+            latest
 
-      - name: Convert image name to lowercase # why do we need this?
-        id: convert-name
-        run: echo "IMAGE_NAME=$(echo ${{ matrix.image-name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+      - name: Get image URI with SHA tag
+        id: get-image-uri
+        run: |
+          sha_tag=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | grep 'sha')
+          echo "IMAGE_URI=$sha_tag" >> $GITHUB_ENV
 
       - name: Build and push multi-arch
         timeout-minutes: 20
@@ -91,9 +96,7 @@ jobs:
           build-args: |
             # TODO: Add build arguments here if needed
           push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -113,10 +116,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Replace Variables # why do we need this?
+      - name: Replace Variables
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
+          sed -i 's/$IMAGE_URI/${{ env.IMAGE_URI }}/g' ${{ matrix.plans.file }}
 
       - name: Update Omnistrate plan in dev environment
         uses: ./.github/actions/update-omnistrate-plan
@@ -152,7 +156,7 @@ jobs:
           dev-environment-name: ${{ env.OMNISTRATE_DEV_ENVIRONMENT_NAME }}
           prod-environment-name: ${{ env.OMNISTRATE_PROD_ENVIRONMENT_NAME }}
 
-      - name: Replace Variables # why do we need this?
+      - name: Replace Variables
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}

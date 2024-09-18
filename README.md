@@ -62,7 +62,7 @@ This workflow upgrades instances to a specified target version.
 
 ### Dev Prod Deployment Workflow
 
-- **Dockerfile Path**: Change the path to the Dockerfile if it's different from `./Dockerfile`.
+- **Dockerfile Path**: Change the path to the Dockerfile if it's different from `./dockerfile`.
 - **Service Plans**: Update the paths to your Docker Compose files or other configuration files.
 - **Omnistrate Credentials**: Ensure your Omnistrate credentials and environment names match your setup.
 

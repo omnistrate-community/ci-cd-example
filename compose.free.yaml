@@ -14,7 +14,7 @@ x-omnistrate-image-registry-attributes:
 
 services:
   hello-world:
-    image: ghcr.io/omnistrate/ci-cd-example:latest # this does not work, because at the moment you push to prod, we need to replace the version during release
+    image: $IMAGE_URI
     ports:
       - target: 3000
     privileged: true
