@@ -21,15 +21,21 @@ Before running the workflows, ensure you have the following:
   - **`OMNISTRATE_PASSWORD`**: Your Omnistrate password.
 
 
-- Ensure that your Compose Spec file includes the `x-omnistrate-image-registry-attributes` section as shown below, as well as the `x-omnistrate-service-plan` section. Refer to the [x-omnistrate-service-plan](https://docs.omnistrate.com/getting-started/compose-spec/#x-omnistrate-service-plan) for more information.
-  ```yaml
-  x-omnistrate-image-registry-attributes:
-    ghcr.io: # Change to docker.io if you want to publish your image on docker.io
-      auth:
-        password: $IMAGE_REGISTRY_PASSWORD # DO NOT CHANGE. Put this placeholder exactly as it is. The workflow will replace it with the real value before building it into service.
-        username: $IMAGE_REGISTRY_USERNAME # Same as above
-  ```
-  
+- Ensure that your Compose Spec file:
+  - Include the `x-omnistrate-image-registry-attributes` section as shown below:
+    ```yaml
+    x-omnistrate-image-registry-attributes:
+      ghcr.io: # Change to docker.io if you want to publish your image on docker.io
+        auth:
+          password: $IMAGE_REGISTRY_PASSWORD # DO NOT CHANGE. Put this placeholder exactly as it is. The workflow will replace it with the real value before building it into service.
+          username: $IMAGE_REGISTRY_USERNAME # Same as above
+    ```
+  - Include the `x-omnistrate-service-plan` section. Refer to the [x-omnistrate-service-plan](https://docs.omnistrate.com/getting-started/compose-spec/#x-omnistrate-service-plan) for more information.
+  - Put the image as a placeholder in the `image` field under the `services` section. The workflow will replace it with the real value before building it into service.
+    ```yaml
+    image: $IMAGE_URI
+    ```
+
 - If you are using the GitHub Container Registry, add this line to your Dockerfile to link the image to the GitHub repository:
   ```Dockerfile
   LABEL org.opencontainers.image.source=https://github.com/omnistrate/ci-cd-example
