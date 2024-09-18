@@ -131,7 +131,7 @@ jobs:
         run: |
           sed -i 's/$IMAGE_REGISTRY_PASSWORD/${{ env.REGISTRY_PASSWORD }}/g' ${{ matrix.plans.file }}
           sed -i 's/$IMAGE_REGISTRY_USERNAME/${{ env.REGISTRY_USERNAME }}/g' ${{ matrix.plans.file }}
-          sed -i 's/$IMAGE_URI/${{ needs.build-and-push.outputs.image_uri }}/g' ${{ matrix.plans.file }}
+          sed -i 's#$IMAGE_URI#${{ needs.build-and-push.outputs.image_uri }}#g' ${{ matrix.plans.file }}
 
       - name: Update Omnistrate plan in dev environment
         if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
