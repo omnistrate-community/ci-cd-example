@@ -14,7 +14,7 @@ x-omnistrate-image-registry-attributes:
 
 services:
   hello-world:
-    image: ghcr.io/omnistrate/ci-cd-example:latest
+    image: $IMAGE_URI
     ports:
       - target: 3000
     privileged: true

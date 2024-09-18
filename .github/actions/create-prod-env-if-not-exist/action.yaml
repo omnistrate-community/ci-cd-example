@@ -27,13 +27,9 @@ runs:
         email: ${{ inputs.username }}
         password: ${{ inputs.password }}
         version: latest
-
+      
     - name: Create production environment if not exist
-      shell: bash
       run: |
-        echo "Omnistrate CTL version:"
-        omctl --version
-        
         # Disable exit on error
         set +e
         
