@@ -21,7 +21,7 @@ Before running the workflows, ensure you have the following:
   - **`OMNISTRATE_PASSWORD`**: Your Omnistrate password.
 
 
-- Ensure that your Compose Spec file:
+- Ensure that your Compose Spec file is correctly configured:
   - Include the `x-omnistrate-image-registry-attributes` section as shown below:
     ```yaml
     x-omnistrate-image-registry-attributes:
