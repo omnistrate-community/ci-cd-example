@@ -32,6 +32,7 @@ runs:
         version: latest
 
     - name: Update plan using Omnistrate CTL
+      shell: bash
       run: |
         echo "Updating plan with file: ${{ inputs.file }}"
         omctl build -f "${{ github.workspace }}/${{ inputs.file }}" -n "${{ inputs.service-name }}" --environment "${{ inputs.environment }}" --environment-type "${{ inputs.environment-type }}" --release-as-preferred
