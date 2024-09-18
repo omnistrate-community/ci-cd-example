@@ -28,7 +28,8 @@ runs:
         password: ${{ inputs.password }}
         version: latest
       
-    - name: Create production environment if not exist
+    - name: Create production environment if not exists
+      shell: bash
       run: |
         # Disable exit on error
         set +e
