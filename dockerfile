@@ -26,4 +26,4 @@ EXPOSE 3000
 CMD ["./server"]
 
 # Add a label with the GitHub source
-LABEL org.opencontainers.image.source=https://github.com/omnistrate/ci-cd-example
+LABEL org.opencontainers.image.source=https://github.com/omnistrate-community/ci-cd-example
