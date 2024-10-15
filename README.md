@@ -38,7 +38,7 @@ Before running the workflows, ensure you have the following:
 
 - If you are using the GitHub Container Registry, add this line to your Dockerfile to link the image to the GitHub repository:
   ```Dockerfile
-  LABEL org.opencontainers.image.source=https://github.com/omnistrate/ci-cd-example
+  LABEL org.opencontainers.image.source=https://github.com/omnistrate-community/ci-cd-example
   ```
   
 - Review the TODOs in `.github/workflows/dev-prod-deployment.yaml` and ensure that the values are correctly set for your case.

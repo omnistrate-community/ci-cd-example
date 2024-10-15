@@ -25,7 +25,7 @@ runs:
   using: "composite"
   steps:
     - name: Setup Omnistrate CTL
-      uses: omnistrate/setup-omnistrate-ctl@v1
+      uses: omnistrate-oss/setup-omnistrate-ctl@v1
       with:
         email: ${{ inputs.username }}
         password: ${{ inputs.password }}

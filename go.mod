@@ -1,4 +1,4 @@
-module github.com/omnistrate/ci-cd-example
+module github.com/omnistrate-community/ci-cd-example
 
 go 1.21
 
