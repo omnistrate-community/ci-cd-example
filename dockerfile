@@ -1,5 +1,5 @@
 # First stage: build the Go binary
-FROM golang:1.24-alpine AS build
+FROM golang:1.25-alpine AS build
 
 # Set up working directory in the container
 WORKDIR /app
