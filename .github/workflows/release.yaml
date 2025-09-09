@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -124,7 +124,7 @@ jobs:
     steps:
       - name: Checkout
         if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Replace Variables
         if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
@@ -160,7 +160,7 @@ jobs:
     steps:
       - name: Checkout
         if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Create Production Environment if not exist
         if: ${{ github.event.inputs.plan == null || github.event.inputs.plan == matrix.plans.key }}
