@@ -11,6 +11,11 @@ on:
         description: 'Target version for the upgrade. e.g. 1.0 | latest | preferred'
         required: true
         type: string
+      working-directory:
+        description: 'Working directory for the action'
+        required: false
+        type: string
+        default: '.'
 
 env:
   OMNISTRATE_USERNAME: ${{ secrets.OMNISTRATE_USERNAME }}
@@ -38,3 +43,4 @@ jobs:
           password: ${{ env.OMNISTRATE_PASSWORD }}
           instances: ${{ github.event.inputs.instance_ids }}
           target-version: ${{ github.event.inputs.target_version }}
+          working-directory: ${{ github.event.inputs.working-directory || '.' }}

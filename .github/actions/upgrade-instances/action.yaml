@@ -14,6 +14,10 @@ inputs:
   target-version:
     description: "The version to upgrade to, e.g. 1.0 | latest | preferred"
     required: true
+  working-directory:
+    description: "Working directory for the action"
+    required: false
+    default: '.'
 
 runs:
   using: "composite"
@@ -27,6 +31,7 @@ runs:
 
     - name: Upgrade instances
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: |
         echo "Upgrading instances: ${{ inputs.instances }}"
         omctl upgrade ${{ inputs.instances }} --version ${{ inputs.target-version }}
