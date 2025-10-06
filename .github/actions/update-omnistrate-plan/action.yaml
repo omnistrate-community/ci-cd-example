@@ -20,6 +20,10 @@ inputs:
   environment-type:
     description: "The type of environment to update the plan with"
     required: true
+  working-directory:
+    description: "Working directory for the action"
+    required: false
+    default: '.'
 
 runs:
   using: "composite"
@@ -34,5 +38,6 @@ runs:
     - name: Update plan using Omnistrate CTL
       shell: bash
       run: |
+        cd "${{ inputs.working-directory }}"
         echo "Updating plan with file: ${{ inputs.file }}"
-        omctl build -f "${{ github.workspace }}/${{ inputs.file }}" -n "${{ inputs.service-name }}" --environment "${{ inputs.environment }}" --environment-type "${{ inputs.environment-type }}" --release-as-preferred
+        omctl build -f "${{ inputs.file }}" -n "${{ inputs.service-name }}" --environment "${{ inputs.environment }}" --environment-type "${{ inputs.environment-type }}" --release-as-preferred
