@@ -31,7 +31,7 @@ runs:
 
     - name: Upgrade instances
       shell: bash
-      working-directory: ${{ inputs.working-directory }}
       run: |
+        cd "${{ inputs.working-directory }}"
         echo "Upgrading instances: ${{ inputs.instances }}"
         omctl upgrade ${{ inputs.instances }} --version ${{ inputs.target-version }}

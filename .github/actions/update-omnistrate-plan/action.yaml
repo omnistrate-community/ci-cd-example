@@ -37,12 +37,7 @@ runs:
 
     - name: Update plan using Omnistrate CTL
       shell: bash
-      working-directory: ${{ inputs.working-directory }}
       run: |
+        cd "${{ inputs.working-directory }}"
         echo "Updating plan with file: ${{ inputs.file }}"
-        if [ "${{ inputs.working-directory }}" = "." ]; then
-          FILE_PATH="${{ github.workspace }}/${{ inputs.file }}"
-        else
-          FILE_PATH="${{ github.workspace }}/${{ inputs.working-directory }}/${{ inputs.file }}"
-        fi
-        omctl build -f "$FILE_PATH" -n "${{ inputs.service-name }}" --environment "${{ inputs.environment }}" --environment-type "${{ inputs.environment-type }}" --release-as-preferred
+        omctl build -f "${{ inputs.file }}" -n "${{ inputs.service-name }}" --environment "${{ inputs.environment }}" --environment-type "${{ inputs.environment-type }}" --release-as-preferred
