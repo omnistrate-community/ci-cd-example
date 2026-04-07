@@ -103,7 +103,7 @@ jobs:
       - name: Build and push multi-arch
         timeout-minutes: 20
         id: build-and-push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ${{ github.event.inputs.working-directory || '.' }}
           file: ${{ github.event.inputs.working-directory || '.' }}/${{ env.DOCKERFILE }}
